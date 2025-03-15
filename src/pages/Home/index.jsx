@@ -18,13 +18,27 @@ function Home() {
   }
   // criando novos usuarios e enviando pro servidor
   async function createUsers() {
-    await api.post('/usuarios', {
-      name: inputName.current.value,
-      age: inputAge.current.value,
-      email: inputEmail.current.value
-    })
-    //atualiza dados sozinho
-    getUsers()
+    const name = inputName.current.value;
+    const age = inputAge.current.value;
+    const email = inputEmail.current.value;
+
+    // Verificando se os campos estão preenchidos
+    if (!name || !age || !email) {
+      alert("Todos os campos são obrigatórios!");
+      return;
+    }
+
+    try {
+      await api.post('/usuarios', {
+        name,
+        age: Number(age), // Garantindo que o 'age' seja um número
+        email
+      });
+      getUsers(); // Atualiza a lista após criação
+    } catch (error) {
+      console.error("Erro ao criar usuário:", error);
+      alert("Erro ao criar usuário. Verifique o console para mais detalhes.");
+    }
   }
 
   //deletar usuarios
